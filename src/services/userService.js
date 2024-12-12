@@ -82,7 +82,7 @@ class UserService {
       const existingUser = await db
         .collection('users')
         .find({ email })
-        .toArray();;
+        .toArray();
 
       if (!existingUser.length) {
         throw new Error('Nenhum usuário encontrado com esse email');

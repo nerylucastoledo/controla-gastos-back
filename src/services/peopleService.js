@@ -80,11 +80,11 @@ class PeopleService {
     try {
       const newObjectId = ObjectId.createFromHexString(id)
       const existingPeople = await db
-        .collection('peoles')
-        .find({ id })
+        .collection('peoples')
+        .find({ _id: newObjectId })
         .toArray();
 
-      if (!existingPeople) {
+      if (!existingPeople.length) {
         throw new Error('Nenhum ID encontrado');
       }
 
