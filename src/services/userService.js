@@ -18,9 +18,7 @@ class UserService {
         throw new Error('Nome de usuário ou email já em uso');
       }
       
-      const result = await db
-        .collection('users')
-        .insertOne(userData);
+      await db.collection('users').insertOne(userData);
 
       return {
         message: 'Usuário criado com sucesso!',
