@@ -1,6 +1,6 @@
 const connectDB = require('../config/database');
 var ObjectId = require('mongodb').ObjectId;
-const { months } = require("../utils/validators");
+const { months } = require("../utils/utils");
 
 const createBodyInstallment = (data) => {
   let body = [];

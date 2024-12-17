@@ -1,5 +1,5 @@
 const ExpenseService = require("../services/expenseService");
-const { validateFields } = require("../utils/validators");
+const { validateFields } = require("../utils/utils");
 
 class ExpenseController {
 	static async createExpense(req, res) {
