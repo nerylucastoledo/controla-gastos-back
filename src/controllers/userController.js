@@ -2,37 +2,6 @@ const UserService = require("../services/userService");
 const { validateFields } = require("../utils/utils");
 
 class UserController {
-	static async createUser(req, res) {
-		const { name, salary, username, email } = req.body;
-
-		if (!validateFields([name, salary, username, email])) {
-			return res.status(400).json({ 
-				message: "Você deve preencher todos os campos" }
-			);
-		}
-
-		try {
-			const response = await UserService.createUser(req.body);
-			res.status(201).json(response);
-
-		} catch (error) {
-				res.status(400).json({ message: error.message });
-		}
-	}
-
-	static async findByEmail(req, res) {
-		try {
-			const email = req.params.email;
-			const users = await UserService.findByEmail(email);
-      res.json(users);
-		
-    } catch (error) {
-      res.status(500).json({ 
-				message: error.message 
-			});
-    }
-  }
-
 	static async updateUser(req, res) {
 		const email = req.params.email;
 		const { name, salary } = req.body;

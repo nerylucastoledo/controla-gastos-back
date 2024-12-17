@@ -5,19 +5,6 @@ class UserService {
 		const db = await connectDB();
 
     try {
-      const existingUser = await db
-        .collection('users')
-        .findOne({
-          $or: [
-            { username: userData.username }, 
-            { email: userData.email }
-          ]
-        });
-
-      if (existingUser) {
-        throw new Error('Nome de usuário ou email já em uso');
-      }
-      
       await db.collection('users').insertOne(userData);
 
       return {
