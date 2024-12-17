@@ -1,5 +1,5 @@
 const PeopleService = require("../services/peopleService");
-const validateFields = require("../utils/validators");
+const { validateFields } = require("../utils/validators");
 
 class PeopleContoller {
 	static async createPeople(req, res) {

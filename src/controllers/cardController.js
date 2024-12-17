@@ -1,5 +1,5 @@
 const CardService = require("../services/cardService");
-const validateFields = require("../utils/validators");
+const { validateFields } = require("../utils/validators");
 
 class CardController {
 	static async createCard(req, res) {

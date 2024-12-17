@@ -22,7 +22,7 @@ class CategoryService {
 
       return {
         message: 'Categoria criada com sucesso!',
-        categorys: categoryData
+        category: categoryData
       };
 
     } catch (error) {

@@ -22,7 +22,7 @@ class PeopleService {
 
       return {
         message: 'Pessoa criada com sucesso!',
-        peoples: peopleData
+        people: peopleData
       };
 
     } catch (error) {

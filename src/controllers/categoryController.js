@@ -1,5 +1,5 @@
 const CategoryService = require("../services/categoryService");
-const validateFields = require("../utils/validators");
+const { validateFields } = require("../utils/validators");
 
 class CategoryController {
 	static async createCategory(req, res) {

@@ -22,7 +22,7 @@ class CardService {
 
       return {
         message: 'Cartão criado com sucesso!',
-        cards: cardData
+        card: cardData
       };
 
     } catch (error) {
