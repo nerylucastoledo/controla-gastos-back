@@ -1,3 +1,4 @@
+const CardService = require("../services/cardService");
 const ExpenseService = require("../services/expenseService");
 const { validateFields } = require("../utils/utils");
 
@@ -30,8 +31,17 @@ class ExpenseController {
 	static async findDatabyUsernameAndDate(req, res) {
 		try {
 			const { username, date } = req.params;
-			const response = await ExpenseService.findDatabyUsernameAndDate(username, date);
-      res.json(response);
+			const expenses = await ExpenseService.findDatabyUsernameAndDate(username, date);
+			const cards = await CardService.getAllCards(username);
+
+			console.log(expenses)
+
+			if (expenses.length && cards.length) {
+				res.json({ expenses, cards });
+				return;
+			}
+
+			res.json([])
 		
     } catch (error) {
       res.status(500).json({ 

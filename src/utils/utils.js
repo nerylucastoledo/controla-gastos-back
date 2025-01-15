@@ -2,6 +2,14 @@ const validateFields = (fields) => {
   return fields.every(field => field);
 }
 
+const parseCurrencyString = (currencyString) => {
+	let numberString = currencyString.replace("R$", "").trim();
+	numberString = numberString.replace(/\./g, "");
+	numberString = numberString.replace(",", ".");
+	
+	return parseFloat(numberString);
+}
+
 const months = [
 	"Janeiro",
 	"Fevereiro",
@@ -17,4 +25,4 @@ const months = [
 	"Dezembro"
 ]
 
-module.exports = { validateFields, months};
+module.exports = { validateFields, parseCurrencyString, months};

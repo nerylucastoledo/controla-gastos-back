@@ -1,6 +1,6 @@
 const connectDB = require('../config/database');
 var ObjectId = require('mongodb').ObjectId;
-const { months } = require("../utils/utils");
+const { months, parseCurrencyString } = require("../utils/utils");
 
 const createBodyInstallment = (data) => {
   let body = [];
@@ -71,11 +71,6 @@ class ExpenseService {
     try {
       const db = await connectDB();
       const expenses = await db.collection("bill").find({ username, date }).toArray();
-
-      if (!expenses.length) {
-        throw new Error('Não foi possível encontrar nenhum gasto para este usuário');
-      }
-
       return expenses;
 
     } catch (error) {
@@ -93,11 +88,36 @@ class ExpenseService {
       })
       .toArray();
 
-      if (!expenses.length) {
-        throw new Error('Não foi possível encontrar nenhum gasto para este ano e usuário');
-      }
+      if (!expenses.length) return expenses;
 
-      return expenses;
+      const groupedExpenses = expenses.reduce((acc, expense) => {
+        let monthName = expense.date.replace(/[0-9]/g, '');
+        const value = parseCurrencyString(expense.value);
+
+        // Verifica se já existe uma entrada para o mês
+        if (monthName === "Março") {
+          monthName = "Marco"
+        }
+
+        const existingMonth = acc.find(item => item.month === monthName);
+
+        if (existingMonth) {
+          existingMonth.value += value;
+        } else {
+          acc.push({ 
+            month: monthName, 
+            value 
+          });
+        }
+
+        return acc;
+    }, []);
+
+    const sortedByMonth = groupedExpenses.sort((a, b) => {
+      return months.indexOf(a.month) - months.indexOf(b.month);
+    });
+
+    return sortedByMonth;
 
     } catch (error) {
       throw new Error(error.message || 'Ocorreu um erro ao buscar os gastos');

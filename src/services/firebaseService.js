@@ -53,7 +53,7 @@ class FirebaseAuthService {
 
 					if (idToken && user.length) {
 						return {
-							message: "Usuário logado com sucesso!",
+							message: "Usuário logado com sucesso! Estamos te redirecionando",
 							token: idToken,
 							username: user[0].username, 
 							salary: user[0].salary
