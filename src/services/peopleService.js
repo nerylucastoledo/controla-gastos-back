@@ -41,9 +41,11 @@ class PeopleService {
     const db = await connectDB();
 
     try {
-      const peoples = await db.collection("peoples")
+      const peoples = await db
+        .collection("peoples")
         .find({ username })
         .toArray();
+
       return { data: peoples };
     } catch (error) {
       throw new Error('Ocorreu um erro ao buscar as pessoas.');
@@ -71,9 +73,9 @@ class PeopleService {
           $or: [ { _id: newObjectId } ]
         })
 
-        if (!existingPeople) {
-          throw new Error('Nenhum nome encontrado.');
-        }
+      if (!existingPeople) {
+        throw new Error('Nenhum nome encontrado.');
+      }
 
       await db
         .collection('peoples')

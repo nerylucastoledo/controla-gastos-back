@@ -1,5 +1,5 @@
-const validateFields = (fields) => {
-  return fields.every(field => field);
+const validateFields = (field) => {
+  return field && field.length > 0;
 }
 
 const parseCurrencyString = (currencyString) => {
