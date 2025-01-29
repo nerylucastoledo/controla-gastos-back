@@ -6,7 +6,7 @@ class AuthController {
 			const result = await AuthService.registerUser(req.body);
 			res.status(201).json(result);
 		} catch (error) {
-			res.status(500).json({ message: error.message });
+			res.status(400).json({ message: error.message });
 		}
 	}
 
@@ -18,7 +18,7 @@ class AuthController {
 			.json(result);
 
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			res.status(401).json({ message: error.message });
 		}
 	}
 
@@ -30,7 +30,7 @@ class AuthController {
 			.json(response);
 
     } catch (error) {
-      res.status(500).json({ error: "Ocorreu um erro interno" });
+      res.status(500).json({ message: "Ocorreu um erro interno" });
     }
   }
 }
