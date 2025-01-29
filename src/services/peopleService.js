@@ -1,55 +1,70 @@
 const connectDB = require('../config/database');
+const { validateFields } = require('../utils/utils');
 var ObjectId = require('mongodb').ObjectId; 
 
 class PeopleService {
-	static async createPeople(peopleData) {
+	static async createPeople(body) {
 		const db = await connectDB();
 
     try {
+      const { name, username } = body;
+
+      if (!validateFields(name)) {
+        throw new Error('Nome não pode ser vazio.');
+      }
+
+      if (!validateFields(username)) {
+        throw new Error('Nome de usuário não pode ser vazio.');
+      }
+
       const existingPeople = await db
         .collection('peoples')
         .findOne({
           $or: [
-            { name: peopleData.name, username: peopleData.username }
+            { name, username }
           ]
         });
 
       if (existingPeople) {
-        throw new Error('Nome já cadastrado');
+        throw new Error('Nome já cadastrado! Cadastre outro.');
       }
       
-      await db.collection('peoples').insertOne(peopleData);
+      await db.collection('peoples').insertOne(body);
 
-      return {
-        message: 'Pessoa criada com sucesso!',
-        people: peopleData
-      };
-
+      return { message: 'Pessoa criada com sucesso!'};
     } catch (error) {
-      throw new Error(error.message || 'Não foi possível criar essa pessoa');
+      throw new Error(error.message || 'Não foi possível criar essa pessoa.');
     }
 	}
 
 	static async getAllPeoples(username) {
+    const db = await connectDB();
+
     try {
-      const db = await connectDB();
-      const peoples = await db.collection("peoples").find({ username }).toArray();
-
-      if (!peoples.length) {
-        throw new Error('Não foi possível encontrar nenhuma pessoa para este usuário');
-      }
-
-      return peoples;
-
+      const peoples = await db.collection("peoples")
+        .find({ username })
+        .toArray();
+      return { data: peoples };
     } catch (error) {
-      throw new Error(error.message || 'Ocorreu um erro ao buscar as pessoas');
+      throw new Error('Ocorreu um erro ao buscar as pessoas.');
     }
   }
 
-  static async updatePeopleName(id, name) {
+  static async updatePeopleName(body) {
     const db = await connectDB();
+
     try {
-      const newObjectId = ObjectId.createFromHexString(id)
+      const { _id, name } = body;
+
+      if (!validateFields(_id)) {
+        throw new Error('ID não pode ser vazio.');
+      }
+
+      if (!validateFields(name)) {
+        throw new Error('Nome não pode ser vazio.');
+      }
+
+      const newObjectId = ObjectId.createFromHexString(_id)
       const existingPeople = await db
         .collection('peoples')
         .findOne({
@@ -57,26 +72,25 @@ class PeopleService {
         })
 
         if (!existingPeople) {
-          throw new Error('Nenhuma pessoa encontrada');
+          throw new Error('Nenhum nome encontrado.');
         }
 
-      await db.collection('peoples').updateOne(
-        { _id: newObjectId },
-        { $set: { name }}
-      );
+      await db
+        .collection('peoples')
+        .updateOne(
+          { _id: newObjectId },
+          { $set: { name }}
+        );
 
-      return {
-        message: 'Nome atualizado com sucesso!',
-        people: { name }
-      };
-
+      return { message: 'Nome atualizado com sucesso.' };
     } catch (error) {
-      throw new Error(error.message || 'Ocorreu um erro ao atualizar o nome');
+      throw new Error(error.message || 'Ocorreu um erro ao atualizar o nome.');
     }
   }
 
   static async deletePeople(id) {
     const db = await connectDB();
+
     try {
       const newObjectId = ObjectId.createFromHexString(id)
       const existingPeople = await db
@@ -85,17 +99,18 @@ class PeopleService {
         .toArray();
 
       if (!existingPeople.length) {
-        throw new Error('Nenhum ID encontrado');
+        throw new Error('Nenhum ID encontrado.');
       }
 
-      await db.collection('peoples').deleteOne({ _id: newObjectId });
+      await db
+        .collection('peoples')
+        .deleteOne({ 
+          _id: newObjectId 
+        });
 
-      return {
-        message: 'Nome deletado com sucesso!',
-      };
-
+      return { message: 'Nome deletado com sucesso.' };
     } catch (error) {
-      throw new Error(error.message || 'Erro ao deletar esse nome');
+      throw new Error(error.message || 'Erro ao deletar esse nome.');
     }
   }
 }

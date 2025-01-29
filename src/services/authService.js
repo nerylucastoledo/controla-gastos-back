@@ -110,9 +110,7 @@ class AuthService {
 	static async logoutUser() {
     try {
       await signOut(auth);
-			return {
-				message: 'Usuálio deslogado com sucesso.',
-			};
+			return { message: 'Usuálio deslogado com sucesso.' };
     } catch (error) {
       throw new Error(error.message || 'Ocorreu um erro interno');
     }

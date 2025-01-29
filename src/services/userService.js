@@ -50,7 +50,7 @@ class UserService {
 
       await db.collection('users').deleteOne({ email });
 
-      return {  message: 'Usuário deletado com sucesso.' };
+      return { message: 'Usuário deletado com sucesso.' };
     } catch (error) {
       throw new Error(error.message);
     }

@@ -2,10 +2,8 @@ const UserService = require("../services/userService");
 
 class UserController {
 	static async updateNameAndSalary(req, res) {
-		const email = req.params.email;
-
 		try {
-			const result = await UserService.updateNameAndSalary(email, req.body);
+			const result = await UserService.updateNameAndSalary(req.params.email, req.body);
       res.json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -13,10 +11,8 @@ class UserController {
   }
 
 	static async deleteUser(req, res) {
-		const email = req.params.email;
-
 		try {
-			const result = await UserService.deleteUser(email);
+			const result = await UserService.deleteUser(req.params.email);
       res.json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });

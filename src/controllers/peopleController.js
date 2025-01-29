@@ -3,73 +3,38 @@ const { validateFields } = require("../utils/utils");
 
 class PeopleContoller {
 	static async createPeople(req, res) {
-		const { name, username } = req.body;
-
-		if (!validateFields([name, username])) {
-			return res.status(400).json({ 
-				message: "Você deve preencher todos os campos" }
-			);
-		}
-
 		try {
-			const response = await PeopleService.createPeople(req.body);
-			res.status(201).json(response);
-
+			const result = await PeopleService.createPeople(req.body);
+			res.status(201).json(result);
 		} catch (error) {
-				res.status(400).json({ message: error.message });
+			res.status(400).json({ message: error.message });
 		}
 	}
 
 	static async getAllPeoples(req, res) {
 		try {
-			const { username } = req.params;
-			const peoples = await PeopleService.getAllPeoples(username);
-      res.json(peoples);
-		
+			const result = await PeopleService.getAllPeoples(req.params.username);
+      res.json(result);
     } catch (error) {
-      res.status(500).json({ 
-				message: error.message 
-			});
+      res.status(500).json({ message: error.message });
     }
   }
 
 	static async updatePeopleName(req, res) {
-		const { _id, name } = req.body;
-
-		if (!validateFields([_id, name])) {
-			return res.status(400).json({ 
-				message: "Você deve preencher todos os campos" }
-			);
-		}
-
 		try {
-			const response = await PeopleService.updatePeopleName(_id, name);
-      res.json(response);
-		
+			const result = await PeopleService.updatePeopleName(req.body);
+      res.json(result);
     } catch (error) {
-      res.status(500).json({ 
-				message: error.message 
-			});
+      res.status(500).json({ message: error.message });
     }
   }
 
 	static async deletePeople(req, res) {
-		const { id } = req.params;
-
-		if (!validateFields([id])) {
-			return res.status(400).json({ 
-				message: "O ID não pode ser vazio" }
-			);
-		}
-
 		try {
-			const response = await PeopleService.deletePeople(id);
+			const response = await PeopleService.deletePeople(req.params.id);
       res.json(response);
-		
     } catch (error) {
-      res.status(500).json({ 
-				message: error.message 
-			});
+			res.status(500).json({ message: error.message });
     }
   }
 }
