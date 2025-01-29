@@ -7,10 +7,9 @@ const authMiddleware = require('./src/middleware/auth')
 
 const userRoutes = require('./src/routes/userRoute');
 const peopleRoutes = require('./src/routes/peopleRoute');
-const categorysRoute = require('./src/routes/categoryRoute');
 const cardsRoute = require('./src/routes/cardRoute');
 const expensesRoute = require('./src/routes/expenseRoute');
-const firebaseRoute = require('./src/routes/firebaseRoute');
+const authRoute = require('./src/routes/authRoute');
 
 const app = express();
 app.use(cookieParser());
@@ -23,14 +22,10 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
-app.use('/api', firebaseRoute);
-
+app.use('/api', authRoute);
 app.use('/api', authMiddleware, userRoutes);
 app.use('/api', authMiddleware, peopleRoutes);
-app.use('/api', authMiddleware, categorysRoute);
 app.use('/api', authMiddleware, cardsRoute);
 app.use('/api', authMiddleware, expensesRoute);
 
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost.com:${port}`);
-});
+app.listen(port, () => console.log(`Servidor rodando em http://localhost.com:${port}`));
