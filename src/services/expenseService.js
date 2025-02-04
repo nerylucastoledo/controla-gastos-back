@@ -213,7 +213,7 @@ class ExpenseService {
         })
         .toArray();
 
-      if (!expenses.length) return expenses;
+      if (!expenses.length) return { data: expenses };
 
       const groupedExpenses = groupExpenses(expenses)
       const sortedData = sortedByMonth(groupedExpenses)

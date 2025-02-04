@@ -1,9 +1,9 @@
 const UserService = require("../services/userService");
 
 class UserController {
-	static async updateNameAndSalary(req, res) {
+	static async updateSalary(req, res) {
 		try {
-			const result = await UserService.updateNameAndSalary(req.params.email, req.body);
+			const result = await UserService.updateSalary(req.params.username, req.body);
       res.json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -12,7 +12,7 @@ class UserController {
 
 	static async deleteUser(req, res) {
 		try {
-			const result = await UserService.deleteUser(req.params.email);
+			const result = await UserService.deleteUser(req.params.username);
       res.json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });

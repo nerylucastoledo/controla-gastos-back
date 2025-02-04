@@ -3,7 +3,7 @@ const UserController = require('../controllers/userController');
 
 const router = express.Router();
 
-router.put('/users/:email', UserController.updateNameAndSalary);
-router.delete('/users/:email', UserController.deleteUser);
+router.put('/users/:username', UserController.updateSalary);
+router.delete('/users/:username', UserController.deleteUser);
 
 module.exports = router;

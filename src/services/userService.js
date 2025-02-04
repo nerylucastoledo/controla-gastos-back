@@ -2,53 +2,49 @@ const connectDB = require('../config/database');
 const { validateFields } = require('../utils/utils');
 
 class UserService {
-  static async updateNameAndSalary(email, { name, salary }) {
+  static async updateSalary(username, { salary }) {
     const db = await connectDB();
 
     try {
-      if (!validateFields(name)) {
-        throw new Error('Nome não pode ser vazio.');
-      }
-
       if (!validateFields(salary)) {
         throw new Error('Salário não pode ser vazio.');
       }
 
       const existingUser = await db
         .collection('users')
-        .find({ email })
+        .find({ username })
         .toArray();
 
       if (existingUser.length === 0) {
-        throw new Error('Nenhum usuário encontrado com esse email.');
+        throw new Error('Nenhum usuário encontrado.');
       }
 
       await db.collection('users')
         .updateOne(
-          { email },
-          { $set: { name, salary } }
+          { username },
+          { $set: { salary } }
         );
 
-      return { message: 'Usuário atualizado com sucesso.' };
+      return { message: 'Salário atualizado com sucesso.' };
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  static async deleteUser(email) {
+  static async deleteUser(username) {
     const db = await connectDB();
 
     try {
       const existingUser = await db
         .collection('users')
-        .find({ email })
+        .find({ username })
         .toArray();
 
       if (existingUser.length === 0) {
-        throw new Error('Nenhum usuário encontrado com esse email.');
+        throw new Error('Nenhum usuário encontrado.');
       }
 
-      await db.collection('users').deleteOne({ email });
+      await db.collection('users').deleteOne({ username });
 
       return { message: 'Usuário deletado com sucesso.' };
     } catch (error) {
