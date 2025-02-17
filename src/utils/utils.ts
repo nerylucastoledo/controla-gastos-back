@@ -1,8 +1,14 @@
-const validateFields = (field) => {
+export const validateFields = (field: string) => {
   return field && field.length > 0;
 }
 
-const parseCurrencyString = (currencyString) => {
+export const validateSalary = (salary: number): void => {
+	if (salary < 0) {
+		throw new Error('Salário não pode ser negativo.');
+	}
+}
+
+export const parseCurrencyString = (currencyString: string) => {
 	let numberString = currencyString.replace("R$", "").trim();
 	numberString = numberString.replace(/\./g, "");
 	numberString = numberString.replace(",", ".");
@@ -10,7 +16,7 @@ const parseCurrencyString = (currencyString) => {
 	return parseFloat(numberString);
 }
 
-const months = [
+export const months = [
 	"Janeiro",
 	"Fevereiro",
 	"Marco",
@@ -24,5 +30,3 @@ const months = [
 	"Novembro",
 	"Dezembro"
 ]
-
-module.exports = { validateFields, parseCurrencyString, months};

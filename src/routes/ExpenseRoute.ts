@@ -1,6 +1,7 @@
-const express = require('express');
-const ExpenseController = require('../controllers/expenseController');
-const router = express.Router();
+import { Router } from 'express';
+import ExpenseController from '../controllers/ExpenseController';
+
+const router = Router();
 
 router.get('/expenses/year/:username/:year', ExpenseController.findByusernameAndYear);
 router.get('/expenses/:username/:date', ExpenseController.findDatabyUsernameAndDate);
@@ -10,4 +11,4 @@ router.post('/expenses', ExpenseController.createExpense);
 router.put('/expenses/', ExpenseController.updateExpense);
 router.delete('/expenses/:id', ExpenseController.deleteExpense);
 
-module.exports = router;
+export default router;
