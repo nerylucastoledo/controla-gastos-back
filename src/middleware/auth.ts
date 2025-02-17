@@ -23,13 +23,12 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     req.user = decodedToken;
     next();
   } catch (error) {
-    console.error(error);
     res.clearCookie('access_token', {
       path: '/',
       httpOnly: true,
       sameSite: 'strict',
     });
-    return res.status(401).send({ message: 'Token inválido ou expirado.', error: error instanceof Error ? error.message : 'Erro desconhecido', ok: false });
+    return res.status(401).send({ message: 'Token inválido ou expirado.', error: 403, ok: false });
   }
 };
 
