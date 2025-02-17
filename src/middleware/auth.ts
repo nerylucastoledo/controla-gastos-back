@@ -26,7 +26,8 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     res.clearCookie('access_token', {
       path: '/',
       httpOnly: true,
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
     });
     return res.status(401).send({ message: 'Token inválido ou expirado.', error: 403, ok: false });
   }
