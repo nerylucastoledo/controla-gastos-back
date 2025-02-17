@@ -15,7 +15,7 @@ const port = process.env.PORT || 4000;
 // Middleware
 app.use(cookieParser());
 app.use(cors({
-  origin: ['https://controla-gastos.vercel.app', 'http://localhost:3000'],
+  origin: ['https://controla-gastoss.vercel.app', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(express.json());
