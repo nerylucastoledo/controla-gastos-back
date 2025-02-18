@@ -17,7 +17,8 @@ class AuthController {
 	public static async loginUser(req: Request<IAuthLogin>, res: Response): Promise<void> {
 		try {
 			const result = await AuthService.loginUser(req.body);
-			res.cookie('access_token', result.token, { 
+			res.cookie('access_token', result.token, {
+				httpOnly: true,
 				secure: true,
   			sameSite: 'none',
 			})

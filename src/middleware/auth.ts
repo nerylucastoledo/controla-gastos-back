@@ -12,7 +12,8 @@ declare global {
 }
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const idToken = req.cookies.access_token; 
+  const idToken = req.cookies.access_token;
+  console.log('Cookies recebidos:', req.cookies);
 
   if (!idToken) {
     return res.status(403).json({ error: 'No token provided' });
@@ -23,9 +24,6 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     req.user = decodedToken;
     next();
   } catch (error) {
-    res.clearCookie('access_token', {
-      path: '/',
-    });
     return res.status(401).send({ message: 'Token inválido ou expirado.', error: 403, ok: false });
   }
 };
