@@ -50,24 +50,37 @@ class FirebaseService {
   }
 
   public async registerUser(email: string, password: string): Promise<void> {
-    await createUserWithEmailAndPassword(this.auth, email, password);
+    await createUserWithEmailAndPassword(this.auth, email, password)
+    .catch(() => {
+      throw new Error("Ocorreu um erro interno. Tente novamente")
+    });
+
     if (this.auth.currentUser) {
       await sendEmailVerification(this.auth.currentUser);
     }
   }
 
   public async loginUser(email: string, password: string): Promise<string> {
-    const userCredential: UserCredential = await signInWithEmailAndPassword(this.auth, email, password);
+    const userCredential: UserCredential = await signInWithEmailAndPassword(this.auth, email, password)
+    .catch(() => {
+      throw new Error("Usuário ou senha incorreto.")
+    });
     const idToken: string = await userCredential.user.getIdToken();
     return idToken;
   }
 
   public async logoutUser(): Promise<void> {
-    await signOut(this.auth);
+    await signOut(this.auth)
+    .catch(() => {
+      throw new Error("Ocorreu um erro interno. Tente novamente")
+    });;
   }
 
   public async resetPassword(email: string): Promise<void> {
-    await sendPasswordResetEmail(this.auth, email);
+    await sendPasswordResetEmail(this.auth, email)
+    .catch(() => {
+      throw new Error("Ocorreu um erro interno. Tente novamente")
+    });;
   }
 
   public getAdminInstance() {
