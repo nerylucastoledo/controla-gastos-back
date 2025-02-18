@@ -19,7 +19,7 @@ class AuthController {
 			const result = await AuthService.loginUser(req.body);
 			res.cookie('access_token', result.token, {
 				httpOnly: true,
-				secure: true,
+				secure: false,
   			sameSite: 'none',
 				path: '/',
 			})
@@ -40,7 +40,7 @@ class AuthController {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'none',
-				secure: true
+				secure: false
 			})
 			.status(200)
 			.json(response);

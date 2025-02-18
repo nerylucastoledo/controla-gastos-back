@@ -29,7 +29,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
       path: '/',
       httpOnly: true,
       sameSite: 'none',
-      secure: true
+      secure: false
     })
     return res.status(401).send({ message: 'Token inválido ou expirado.', error: 403, ok: false });
   }
