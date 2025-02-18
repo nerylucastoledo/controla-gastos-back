@@ -35,7 +35,12 @@ class AuthController {
   public static async logoutUser(req: Request, res: Response): Promise<void> {
     try {
       const response = await AuthService.logoutUser();
-      res.clearCookie('access_token')
+      res.clearCookie('access_token', {
+				path: '/',
+				httpOnly: true,
+				sameSite: 'none',
+				secure: true
+			})
 			.status(200)
 			.json(response);
 
