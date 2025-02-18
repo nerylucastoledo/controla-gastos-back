@@ -18,10 +18,8 @@ class AuthController {
 		try {
 			const result = await AuthService.loginUser(req.body);
 			res.cookie('access_token', result.token, {
-				httpOnly: false,
   			sameSite: 'none',
 				path: '/',
-				maxAge: 3600000
 			})
 			.status(200)
 			.json(result);
