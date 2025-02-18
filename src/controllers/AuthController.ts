@@ -21,6 +21,7 @@ class AuthController {
 				httpOnly: true,
 				secure: true,
   			sameSite: 'none',
+				path: '/',
 			})
 			.status(200)
 			.json(result);
