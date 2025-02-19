@@ -15,6 +15,7 @@ import admin, { ServiceAccount } from "firebase-admin";
 
 class FirebaseService {
   private auth: Auth;
+  private token: string = "";
 
   constructor() {
     const firebaseConfig = {
@@ -51,13 +52,18 @@ class FirebaseService {
 
   public async registerUser(email: string, password: string): Promise<void> {
     await createUserWithEmailAndPassword(this.auth, email, password)
+    .then(() => {
+      if (this.auth.currentUser) {
+        sendEmailVerification(this.auth.currentUser)
+        .catch((error) => {
+          console.error(error);
+          throw new Error("Ocorreu um erro interno. Tente novamente");
+        });;
+      }
+    })
     .catch(() => {
       throw new Error("Ocorreu um erro interno. Tente novamente")
     });
-
-    if (this.auth.currentUser) {
-      await sendEmailVerification(this.auth.currentUser);
-    }
   }
 
   public async loginUser(email: string, password: string): Promise<string> {
@@ -66,6 +72,7 @@ class FirebaseService {
       throw new Error("Usuário ou senha incorreto.")
     });
     const idToken: string = await userCredential.user.getIdToken();
+    this.setToken(idToken)
     return idToken;
   }
 
@@ -85,6 +92,14 @@ class FirebaseService {
 
   public getAdminInstance() {
     return admin;
+  }
+
+  private setToken(token: string) {
+    this.token = token;
+  }
+
+  public getToken() {
+    return this.token;
   }
 }
 

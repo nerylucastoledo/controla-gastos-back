@@ -57,6 +57,16 @@ class AuthService {
       throw new Error((error as Error).message || 'Ocorreu um erro interno');
     }
   }
+
+  public async token(): Promise<{ token: any }> {
+    try {
+      const token = Firebase.getToken();
+      const decodedToken = await Firebase.getAdminInstance().auth().verifyIdToken(token + "a");
+      return { token: decodedToken };
+    } catch (error) {
+      throw new Error((error as Error).message || 'Ocorreu um erro interno');
+    }
+  }
 }
 
 export default new AuthService();

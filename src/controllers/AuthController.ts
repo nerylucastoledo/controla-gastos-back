@@ -20,7 +20,7 @@ class AuthController {
 			res.cookie('access_token', result.token, {
   			httpOnly: false,
 				secure: true,
-				sameSite: 'none',
+    		sameSite: 'none',
 				path: '/',
 			})
 			.status(200)
@@ -40,6 +40,17 @@ class AuthController {
 			.status(200)
 			.json(response);
 
+    } catch (error) {
+      res.status(400).json({ 
+        message: error instanceof Error ? error.message : 'Erro interno.' 
+      });
+    }
+  }
+
+	public static async token(req: Request, res: Response): Promise<void> {
+    try {
+      const response = await AuthService.token();
+      res.status(201).json(response);
     } catch (error) {
       res.status(400).json({ 
         message: error instanceof Error ? error.message : 'Erro interno.' 
