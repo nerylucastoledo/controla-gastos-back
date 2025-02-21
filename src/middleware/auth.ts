@@ -2,7 +2,6 @@
 
 import { Request, Response, NextFunction } from 'express';
 import FirebaseService from '../config/firebase';
-
 declare global {
   namespace Express {
     interface Request {
@@ -24,7 +23,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     req.user = decodedToken;
     next();
   } catch (error) {
-    console.error(error);
+    await FirebaseService.logoutUser();
     res.clearCookie('access_token')
     return res.status(401).send({ message: 'Token inválido ou expirado.', error: 403, ok: false });
   }
