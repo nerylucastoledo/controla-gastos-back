@@ -1,25 +1,36 @@
-// src/models/BillModel.ts
-
+import { IsNotEmpty, IsString } from 'class-validator';
 import { IExpenseCreate } from '../utils/types';
 
 export class Bill {
+  @IsNotEmpty({ message: "Username não pode ser vazio."})
+  @IsString()
   private readonly _username: string;
+
+  @IsNotEmpty({ message: "Date não pode ser vazio."})
+  @IsString()
   private readonly _date: string;
+
+  @IsNotEmpty({ message: "Pessoa não pode ser vazia."})
+  @IsString()
   private readonly _people: string;
+
+  @IsNotEmpty({ message: "Categoria não pode ser vazia."})
+  @IsString()
   private readonly _category: string;
+
+  @IsNotEmpty({ message: "Valor não pode ser vazio."})
+  @IsString()
   private readonly _value: string;
+
+  @IsNotEmpty({ message: "Item não pode ser vazio."})
+  @IsString()
   private readonly _item: string;
+
+  @IsNotEmpty({ message: "Cartão não pode ser vazio."})
+  @IsString()
   private readonly _card: string;
 
   constructor(username: string, date: string, people: string, category: string, value: string, item: string, card: string) {
-    this.validateUsername(username);
-    this.validateDate(date);
-    this.validatePeople(people);
-    this.validateCategory(category);
-    this.validateValue(value);
-    this.validateItem(item);
-    this.validateCard(card);
-
     this._username = username;
     this._date = date;
     this._people = people;
@@ -67,47 +78,5 @@ export class Bill {
       item: this.item,
       card: this.card,
     };
-  }
-
-  private validateUsername(username: string): void {
-    if (!username || username.trim().length === 0) {
-      throw new Error('O nome de usuário não pode ser vazio.');
-    }
-  }
-
-  private validateDate(date: string): void {
-    if (!date) {
-      throw new Error('A data não pode ser vazia.');
-    }
-  }
-
-  private validatePeople(people: string): void {
-    if (!people) {
-      throw new Error('A pessoa não pode ser vazia.');
-    }
-  }
-
-  private validateCategory(category: string): void {
-    if (!category) {
-      throw new Error('A categoria não pode ser vazia.');
-    }
-  }
-
-  private validateValue(value: string): void {
-    if (!value) {
-      throw new Error('O valor não pode ser vazio.');
-    }
-  }
-
-  private validateItem(item: string): void {
-    if (!item) {
-      throw new Error('Item não pode ser vazio.');
-    }
-  }
-
-  private validateCard(card: string): void {
-    if (!card) {
-      throw new Error('O cartão não pode ser vazio.');
-    }
   }
 }

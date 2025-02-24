@@ -2,6 +2,7 @@ import Database from '../config/database';
 import { People } from '../models/People';
 import { ObjectId } from 'mongodb';
 import { IPeopleCreate, IPeopleUpdate } from '../utils/types';
+import { validateEntity } from '../utils/Validator';
 
 class PeopleService {
   private db = Database.getInstance().getDb();
@@ -10,12 +11,16 @@ class PeopleService {
     try {
       const newPeople = new People(body.name, body.username);
 
-      const existingPeople = await this.db.collection('peoples').findOne({
-        $or: [{ name: newPeople.name }, { username: newPeople.username }]
-      });
+      const validationErrors = await validateEntity(newPeople);
+      
+      if (validationErrors.length > 0) {
+        throw new Error(validationErrors[0]);
+      }
+
+      const existingPeople = await this.existingPeople(newPeople.name, newPeople.username)
 
       if (existingPeople) {
-        throw new Error('Nome ou nome de usuário já cadastrado! Cadastre outro.');
+        throw new Error('Nome ou username já cadastrado! Cadastre outro.');
       }
 
       await this.db.collection('peoples').insertOne(newPeople.toJson());
@@ -37,6 +42,14 @@ class PeopleService {
   public async updatePeopleName(body: IPeopleUpdate): Promise<{ message: string }> {
     try {
       const { _id, name } = body;
+
+      if (!_id.length ) {
+        throw new Error('ID não pode ser vazio.');
+      }
+
+      if (!name.length) {
+        throw new Error('Nome não pode ser vazio.');
+      }
 
       const newObjectId = new ObjectId(_id);
       const existingPeople = await this.db.collection('peoples').findOne({ _id: newObjectId });
@@ -71,6 +84,18 @@ class PeopleService {
     } catch (error) {
       throw new Error((error as Error).message || 'Erro ao deletar essa pessoa.');
     }
+  }
+
+  private existingPeople = async (name: string, username: string) => {
+    const cards = await this.db
+      .collection('users')
+      .findOne({
+        $or: [
+          { name: name, username: username }, 
+        ]
+      });
+
+    return cards;
   }
 }
 

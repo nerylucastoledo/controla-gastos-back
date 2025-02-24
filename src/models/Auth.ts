@@ -1,17 +1,28 @@
+import { IsNotEmpty, IsNumber, IsString, Min, MinLength } from "class-validator";
+
 export class Auth {
+  @IsNotEmpty({ message: "E-mail não pode ser vazio."})
+  @IsString()
   private readonly _email: string;
+
+  @IsNotEmpty({ message: "Nome não pode ser vazio."})
+  @IsString()
   private readonly _name: string;
+
+  @IsNotEmpty({ message: "Username não pode ser vazio."})
+  @IsString()
   private readonly _username: string;
+
+  @IsNotEmpty({ message: "Salário não pode ser vazio." })
+  @IsNumber()
+  @Min(1, { message: "Salário deve ser maior que zero." }) 
   private readonly _salary: number;
+
+  @IsNotEmpty({ message: "Senha não pode ser vazia." })
+  @IsString()
   private readonly _password: string;
 
   constructor(email: string, name: string, username: string, salary: number, password: string) {
-    this.validateEmail(email);
-    this.validateName(name);
-    this.validateUsername(username);
-    this.validateSalary(salary);
-    this.validatePassword(password);
-
     this._email = email;
     this._name = name;
     this._username = username;
@@ -47,36 +58,5 @@ export class Auth {
       salary: this.salary,
       passwrod: this.password
     };
-  }
-
-  private validateEmail(email: string): void {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-      throw new Error('Email inválido.');
-    }
-  }
-
-  private validateName(name: string): void {
-    if (name.length < 3) {
-      throw new Error('O nome deve ter pelo menos 3 letras.');
-    }
-  }
-
-  private validateUsername(username: string): void {
-    if (!username || username.trim().length === 0) {
-      throw new Error('O nome de usuário não pode ser vazio.');
-    }
-  }
-
-  private validateSalary(salary: number): void {
-    if (salary < 0) {
-      throw new Error('Salário não pode ser negativo.');
-    }
-  }
-
-  private validatePassword(password: string): void {
-    if (password.length < 6) {
-      throw new Error('A senha deve ter pelo menos 6 caracteres.');
-    }
   }
 }

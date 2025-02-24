@@ -2,6 +2,7 @@ import Database from '../config/database';
 import { Auth } from '../models/Auth';
 import Firebase from '../config/firebase';
 import { IAuthCreate, IAuthLogin } from '../utils/types';
+import { validateEntity } from '../utils/Validator';
 
 const auth = Firebase.getAuthInstance();
 
@@ -12,8 +13,14 @@ class AuthService {
 
     try {
       const newUser = new Auth(body.email, body.name, body.username, body.salary, body.password);
+      const validationErrors = await validateEntity(newUser);
 
-      const existingUser = await this.db.collection("users").findOne({ email: newUser.email });
+      if (validationErrors.length > 0) {
+        throw new Error(validationErrors[0]);
+      }
+
+      const existingUser = await this.existingUser(newUser.email)
+
       if (existingUser) {
         throw new Error('Email já está em uso.');
       }
@@ -33,16 +40,17 @@ class AuthService {
 
       const idToken = await Firebase.loginUser(email, password);
 
-      const user = await this.db.collection("users").findOne({ email });
-      if (!user) {
+      const existingUser = await this.existingUser(email)
+
+      if (!existingUser) {
         throw new Error("Usuário não encontrado.");
       }
 
       return {
         message: "Usuário logado com sucesso!",
         token: idToken,
-        username: user.username,
-        salary: user.salary,
+        username: existingUser.username,
+        salary: existingUser.salary,
       };
     } catch (error) {
       throw new Error((error as Error).message || 'Não foi acessar a conta. Tente novamente');
@@ -65,6 +73,18 @@ class AuthService {
     } catch (error) {
       throw new Error((error as Error).message || 'Ocorreu um erro interno');
     }
+  }
+
+  private existingUser = async (email: string) => {
+    const cards = await this.db
+      .collection('users')
+      .findOne({
+        $or: [
+          { name: email }, 
+        ]
+      });
+
+    return cards;
   }
 }
 

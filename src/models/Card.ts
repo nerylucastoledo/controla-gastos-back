@@ -1,29 +1,34 @@
-// src/models/CardModel.ts
+import { IsNotEmpty, IsString, MinLength } from "class-validator";
 
 export class Card {
+  @IsNotEmpty({ message: "Nome não pode ser vazio."})
+  @IsString()
   private readonly _name: string;
+
+  @IsNotEmpty({ message: "Cor não pode ser vazia."})
+  @IsString()
+  @MinLength(4, { message: "Cor deve começar com # e ter no minimo 4 valores."})
   private readonly _color: string;
+
+  @IsNotEmpty({ message: "Username não pode ser vazio."})
+  @IsString()
   private readonly _username: string;
 
   constructor(name: string, color: string, username: string) {
-    this.validateName(name);
-    this.validateColor(color);
-    this.validateUsername(username);
-
     this._name = name;
     this._color = color;
     this._username = username;
   }
 
-  public get name(): string {
+  get name(): string {
     return this._name;
   }
 
-  public get color(): string {
+  get color(): string {
     return this._color;
   }
 
-  public get username(): string {
+  get username(): string {
     return this._username;
   }
 
@@ -33,23 +38,5 @@ export class Card {
       color: this.color,
       username: this.username,
     };
-  }
-
-  private validateName(name: string): void {
-    if (!name || name.trim().length === 0) {
-      throw new Error('Nome não pode ser vazio.');
-    }
-  }
-
-  private validateColor(color: string): void {
-    if (!color || color.trim().length === 0) {
-      throw new Error('Cor não pode ser vazia.');
-    }
-  }
-
-  private validateUsername(username: string): void {
-    if (!username || username.trim().length === 0) {
-      throw new Error('Nome de usuário não pode ser vazio.');
-    }
   }
 }

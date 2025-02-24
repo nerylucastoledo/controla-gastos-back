@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 import { IExpenseCreate, IExpenseUpdate } from '../utils/types';
 import { parseCurrencyString, validateFields } from '../utils/utils';
 import { months } from '../utils/utils';
+import { validateEntity } from '../utils/Validator';
 
 interface Expense {
   month: string;
@@ -17,6 +18,12 @@ class ExpenseService {
     try {
       const newExpense = new Bill(body.username, body.date, body.people, body.category, body.value, body.item, body.card);
 
+      const validationErrors = await validateEntity(newExpense);
+      
+      if (validationErrors.length > 0) {
+        throw new Error(validationErrors[0]);
+      }
+
       await this.db.collection('bill').insertOne(newExpense.toJson());
       return { message: 'Gasto cadastrado com sucesso.' };
     } catch (error) {
@@ -27,6 +34,12 @@ class ExpenseService {
   public async createExpensesInstallments(body: IExpenseCreate): Promise<{ message: string }> {
     try {
       const newExpense = new Bill(body.username, body.date, body.people, body.category, body.value, body.item, body.card);
+
+      const validationErrors = await validateEntity(newExpense);
+      
+      if (validationErrors.length > 0) {
+        throw new Error(validationErrors[0]);
+      }
 
       const installmentsData = this.createBodyInstallment(newExpense);
       await this.db.collection('bill').insertMany(installmentsData);
@@ -79,10 +92,22 @@ class ExpenseService {
     try {
       const { _id, category, value, item } = body;
 
-      if (!validateFields(_id)) {
+      if (!_id.length ) {
         throw new Error('ID não pode ser vazio.');
       }
 
+      if (!category.length ) {
+        throw new Error('categoria não pode ser vazia.');
+      }
+
+      if (!value.length) {
+        throw new Error('Valor não pode ser vazio.');
+      }
+
+      if (!item.length ) {
+        throw new Error('Item não pode ser vazio.');
+      }
+        
       const newObjectId = new ObjectId(_id);
       const existingExpense = await this.db.collection('bill').findOne({ _id: newObjectId });
 

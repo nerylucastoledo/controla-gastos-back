@@ -2,23 +2,27 @@ import Database from '../config/database';
 import { Card } from '../models/Card';
 import { ObjectId } from 'mongodb';
 import { ICardCreate } from '../utils/types';
+import { validateEntity } from '../utils/Validator';
 
 class CardService {
   private db = Database.getInstance().getDb();
 
   public async createCard(body: ICardCreate): Promise<{ message: string }> {
     try {
-      const newCard = new Card(body.name, body.color, body.username);
+      const card = new Card(body.name, body.color, body.username);
+      const validationErrors = await validateEntity(card);
 
-      const existingCard = await this.db.collection('cards').findOne({
-        $or: [{ name: newCard.name }, { username: newCard.username }]
-      });
+      if (validationErrors.length > 0) {
+        throw new Error(validationErrors[0]);
+      }
+
+      const existingCard = await this.existingCard(card.name, card.username)
 
       if (existingCard) {
         throw new Error('Cartão já cadastrado.');
       }
 
-      await this.db.collection('cards').insertOne(newCard.toJson());
+      await this.db.collection('cards').insertOne(card.toJson());
       return { message: 'Cartão criado com sucesso.' };
     } catch (error) {
       throw new Error((error as Error).message || 'Não foi possível criar esse cartão.');
@@ -37,6 +41,18 @@ class CardService {
   public async updateCard(body: { _id: string; name: string; color: string }): Promise<{ message: string }> {
     try {
       const { _id, name, color } = body;
+
+      if (!_id.length ) {
+        throw new Error('ID não pode ser vazio.');
+      }
+
+      if (!name.length) {
+        throw new Error('Nome não pode ser vazio.');
+      }
+
+      if (!color.length) {
+        throw new Error('Cor não pode ser vazia.');
+      }
 
       const newObjectId = new ObjectId(_id);
       const existingCard = await this.db.collection('cards').findOne({ _id: newObjectId });
@@ -71,6 +87,18 @@ class CardService {
     } catch (error) {
       throw new Error((error as Error).message || 'Erro ao deletar esse cartão.');
     }
+  }
+
+  private existingCard = async (name: string, username: string) => {
+    const cards = await this.db
+      .collection('cards')
+      .findOne({
+        $or: [
+          { name: name, username: username }, 
+        ]
+      });
+
+    return cards;
   }
 }
 
