@@ -80,7 +80,7 @@ class AuthService {
       .collection('users')
       .findOne({
         $or: [
-          { name: email }, 
+          { email: email }, 
         ]
       });
 
