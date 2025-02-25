@@ -22,7 +22,6 @@ class AuthController {
 				secure: true,
     		sameSite: 'none',
 				path: '/',
-				domain: "controla-gastos-back.vercel.app"
 			})
 			.status(200)
 			.json(result);
