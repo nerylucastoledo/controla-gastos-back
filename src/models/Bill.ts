@@ -1,5 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { IExpenseCreate } from '../utils/types';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class Bill {
   @IsNotEmpty({ message: "Username não pode ser vazio."})
@@ -30,7 +29,11 @@ export class Bill {
   @IsString()
   private readonly _card: string;
 
-  constructor(username: string, date: string, people: string, category: string, value: string, item: string, card: string) {
+  @IsNotEmpty({ message: "Parcelamento não pode ser 0."})
+  @IsNumber()
+  private readonly _installments: number;
+
+  constructor(username: string, date: string, people: string, category: string, value: string, item: string, card: string, installments: number) {
     this._username = username;
     this._date = date;
     this._people = people;
@@ -38,6 +41,7 @@ export class Bill {
     this._value = value;
     this._item = item;
     this._card = card;
+    this._installments = installments;
   }
 
   public get username(): string {
@@ -68,7 +72,11 @@ export class Bill {
     return this._card;
   }
 
-  public toJson(): IExpenseCreate {
+  public get installments(): number {
+    return this._installments;
+  }
+
+  public toJson(): object {
     return {
       username: this.username,
       date: this.date,

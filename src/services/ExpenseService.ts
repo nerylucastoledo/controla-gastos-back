@@ -16,7 +16,7 @@ class ExpenseService {
 
   public async createExpense(body: IExpenseCreate): Promise<{ message: string }> {
     try {
-      const newExpense = new Bill(body.username, body.date, body.people, body.category, body.value, body.item, body.card);
+      const newExpense = new Bill(body.username, body.date, body.people, body.category, body.value, body.item, body.card, body.installments);
 
       const validationErrors = await validateEntity(newExpense);
       
@@ -33,7 +33,7 @@ class ExpenseService {
 
   public async createExpensesInstallments(body: IExpenseCreate): Promise<{ message: string }> {
     try {
-      const newExpense = new Bill(body.username, body.date, body.people, body.category, body.value, body.item, body.card);
+      const newExpense = new Bill(body.username, body.date, body.people, body.category, body.value, body.item, body.card, body.installments);
 
       const validationErrors = await validateEntity(newExpense);
       
@@ -115,7 +115,7 @@ class ExpenseService {
         throw new Error('Nenhum gasto encontrado.');
       }
 
-      const updatedExpense = new Bill(existingExpense.username, existingExpense.date, existingExpense.people, category, value, item, existingExpense.card);
+      const updatedExpense = new Bill(existingExpense.username, existingExpense.date, existingExpense.people, category, value, item, existingExpense.card, 0);
       await this.db.collection('bill').updateOne(
         { _id: newObjectId },
         { $set: updatedExpense.toJson() }

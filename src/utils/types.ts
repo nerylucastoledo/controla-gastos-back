@@ -35,7 +35,7 @@ export interface IExpenseCreate {
 	value: string;
 	item: string;
 	card: string;
-	installments?: number;
+	installments: number;
 }
 
 export interface IExpenseUpdate {

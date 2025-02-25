@@ -9,6 +9,7 @@ class ExpenseController {
 			if (req.body.installments > 1) {
 				const result = await ExpenseService.createExpensesInstallments(req.body);
 				res.status(201).json(result);
+				return;
 			}
 
 			const result = await ExpenseService.createExpense(req.body);
