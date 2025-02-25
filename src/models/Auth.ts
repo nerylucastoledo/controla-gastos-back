@@ -56,7 +56,7 @@ export class Auth {
       name: this.name,
       username: this.username,
       salary: this.salary,
-      passwrod: this.password
+      password: this.password
     };
   }
 }
