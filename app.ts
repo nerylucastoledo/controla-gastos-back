@@ -17,6 +17,8 @@ app.use(cookieParser());
 app.use(cors({
   origin: ['https://controla-gastos-back.vercel.app', 'http://localhost:3000'],
   credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 app.use(express.json());
 

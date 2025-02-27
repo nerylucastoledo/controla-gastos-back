@@ -18,7 +18,7 @@ class AuthController {
 		try {
 			const result = await AuthService.loginUser(req.body);
 			res.cookie('access_token', result.token, {
-  			httpOnly: false,
+  			httpOnly: true,
 				secure: true,
     		sameSite: 'none',
 				path: '/',
