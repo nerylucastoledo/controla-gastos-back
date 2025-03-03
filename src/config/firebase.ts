@@ -78,7 +78,6 @@ class FirebaseService {
 
   public async logoutUser(): Promise<void> {
     await signOut(this.auth)
-    .then(() => this.setToken(""))
     .catch(() => {
       throw new Error("Ocorreu um erro interno. Tente novamente")
     });;

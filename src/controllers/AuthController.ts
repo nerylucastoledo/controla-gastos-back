@@ -17,12 +17,7 @@ class AuthController {
 	public static async loginUser(req: Request<IAuthLogin>, res: Response): Promise<void> {
 		try {
 			const result = await AuthService.loginUser(req.body);
-			res.cookie('access_token', result.token, {
-  			httpOnly: true,
-				secure: true,
-    		sameSite: 'none',
-				path: '/',
-			})
+			res
 			.status(200)
 			.json(result);
 
@@ -36,7 +31,7 @@ class AuthController {
   public static async logoutUser(req: Request, res: Response): Promise<void> {
     try {
       const response = await AuthService.logoutUser();
-      res.clearCookie('access_token')
+      res
 			.status(200)
 			.json(response);
 

@@ -11,8 +11,8 @@ declare global {
 }
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const idToken = req.cookies.access_token;
-  console.log('Cookies recebidos:', req.cookies);
+  const idToken = req.headers.authorization;
+  console.log('Cookies recebidos:', idToken);
 
   if (!idToken) {
     return res.status(403).json({ error: 'No token provided' });
@@ -24,7 +24,6 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     next();
   } catch (error) {
     await FirebaseService.logoutUser();
-    res.clearCookie('access_token')
     return res.status(401).send({ message: 'Token inválido ou expirado.', error: 403, ok: false });
   }
 };
