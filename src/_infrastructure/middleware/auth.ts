@@ -1,7 +1,7 @@
 // src/middleware/authMiddleware.ts
 
 import { Request, Response, NextFunction } from 'express';
-import FirebaseService from '../config/firebase';
+import FirebaseService from '../../config/firebase';
 declare global {
   namespace Express {
     interface Request {
@@ -12,10 +12,9 @@ declare global {
 
 const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const idToken = req.headers.authorization;
-  console.log('Cookies recebidos:', idToken);
 
   if (!idToken) {
-    return res.status(403).json({ error: 'No token provided' });
+    return res.status(403).json({ error: 'Nenhum token fornecido.' });
   }
 
   try {
