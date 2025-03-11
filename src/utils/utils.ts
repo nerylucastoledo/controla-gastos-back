@@ -1,7 +1,3 @@
-export const validateFields = (field: string) => {
-  return field && field.length > 0;
-}
-
 export const parseCurrencyString = (currencyString: string) => {
 	let numberString = currencyString.replace("R$", "").trim();
 	numberString = numberString.replace(/\./g, "");
