@@ -4,14 +4,14 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-import { errorHandler } from './src/_infrastructure/middleware/errorHandler';
-import authMiddleware from './src/_infrastructure/middleware/auth';
+import { errorHandler } from './src/infrastructure/middleware/errorHandler';
+import authMiddleware from './src/infrastructure/middleware/auth';
 
-import { authRoutes } from './src/_presentation/routes/AuthRoutes';
-import { cardRoutes } from './src/_presentation/routes/CardRoutes';
-import { billRoutes } from './src/_presentation/routes/BillRoutes';
-import { peopleRoutes } from './src/_presentation/routes/PeopleRoutes';
-import { userRoutes } from './src/_presentation/routes/UserRoutes';
+import { authRoutes } from './src/presentation/routes/AuthRoutes';
+import { cardRoutes } from './src/presentation/routes/CardRoutes';
+import { billRoutes } from './src/presentation/routes/BillRoutes';
+import { peopleRoutes } from './src/presentation/routes/PeopleRoutes';
+import { userRoutes } from './src/presentation/routes/UserRoutes';
 
 const app = express();
 const port = process.env.PORT || 4000;
