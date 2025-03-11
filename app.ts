@@ -1,18 +1,21 @@
 import 'dotenv/config';
+
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import authMiddleware from './src/middleware/auth';
-import userRoutes from './src/routes/UserRoute';
-import peopleRoutes from './src/routes/PeopleRoute';
-import cardsRoute from './src/routes/CardRoute';
-import expensesRoute from './src/routes/ExpenseRoute';
-import authRoute from './src/routes/AuthRoute';
+
+import { errorHandler } from './src/_infrastructure/middleware/errorHandler';
+import authMiddleware from './src/_infrastructure/middleware/auth';
+
+import { authRoutes } from './src/_presentation/routes/AuthRoutes';
+import { cardRoutes } from './src/_presentation/routes/CardRoutes';
+import { billRoutes } from './src/_presentation/routes/BillRoutes';
+import { peopleRoutes } from './src/_presentation/routes/PeopleRoutes';
+import { userRoutes } from './src/_presentation/routes/UserRoutes';
 
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Middleware
 app.use(cookieParser());
 app.use(cors({
   origin: ['https://controla-gastos-back.vercel.app', 'http://localhost:3000'],
@@ -23,11 +26,12 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
-app.use('/api', authRoute);
+app.use('/api', authRoutes);
 app.use('/api', authMiddleware, userRoutes);
 app.use('/api', authMiddleware, peopleRoutes);
-app.use('/api', authMiddleware, cardsRoute);
-app.use('/api', authMiddleware, expensesRoute);
+app.use('/api', authMiddleware, cardRoutes);
+app.use('/api', authMiddleware, billRoutes);
+app.use(errorHandler);
 
 // Inicializando o servidor
 app.listen(port, () => {
