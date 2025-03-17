@@ -4,14 +4,13 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-import { errorHandler } from './src/infrastructure/middleware/errorHandler';
-import authMiddleware from './src/infrastructure/middleware/auth';
+import authMiddleware from './src/middleware/auth';
 
-import { authRoutes } from './src/presentation/routes/AuthRoutes';
-import { cardRoutes } from './src/presentation/routes/CardRoutes';
-import { billRoutes } from './src/presentation/routes/BillRoutes';
-import { peopleRoutes } from './src/presentation/routes/PeopleRoutes';
-import { userRoutes } from './src/presentation/routes/UserRoutes';
+import { authRoutes } from './src/infrastructure/web/routes/AuthRoutes';
+import { cardRoutes } from './src/infrastructure/web/routes/CardRoutes';
+import { billRoutes } from './src/infrastructure/web/routes/BillRoutes';
+import { peopleRoutes } from './src/infrastructure/web/routes/PeopleRoutes';
+import { userRoutes } from './src/infrastructure/web/routes/UserRoutes';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -31,7 +30,6 @@ app.use('/api', authMiddleware, userRoutes);
 app.use('/api', authMiddleware, peopleRoutes);
 app.use('/api', authMiddleware, cardRoutes);
 app.use('/api', authMiddleware, billRoutes);
-app.use(errorHandler);
 
 // Inicializando o servidor
 app.listen(port, () => {
