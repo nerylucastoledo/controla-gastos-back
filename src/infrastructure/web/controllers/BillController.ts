@@ -50,7 +50,7 @@ export class BillController {
 
   async findByusernameAndYear(req: Request, res: Response) {
     try {
-      const dto: ListUsernameAndYearInputDTO = Object.assign(new ListUsernameAndYearInputDTO(), req.params)
+      const dto: ListUsernameAndYearInputDTO = { username: req.user.uid, year: req.params.year }
       const bills = await this.listUsernameAndYear.execute(dto);
       res.status(200).json({ data: bills });
     } catch(err) {
@@ -60,7 +60,7 @@ export class BillController {
 
   async findDatabyUsernameAndDate(req: Request, res: Response) {
     try {
-      const dto: ListUsernameDateInputDTO = Object.assign(new ListUsernameDateInputDTO(), req.params)
+      const dto: ListUsernameDateInputDTO = { username: req.user.uid, date: req.params.date }
       const bills = await this.listUsernameDate.execute(dto);
       res.status(200).json({ data: bills });
     } catch(err) {
@@ -70,7 +70,7 @@ export class BillController {
 
   async findDataByUsernameDateAndCard(req: Request, res: Response) {
     try {
-      const dto: ListUsernameDateCardInputDTO = Object.assign(new ListUsernameDateCardInputDTO(), req.params)
+      const dto: ListUsernameDateCardInputDTO = { username: req.user.uid, date: req.params.date, card: req.params.card }
       const bills = await this.listUsernameDateCard.execute(dto);
       res.status(200).json({ data: bills });
     } catch(err) {

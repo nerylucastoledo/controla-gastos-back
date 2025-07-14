@@ -8,7 +8,7 @@ router.post("/peoples", (request, response) => {
   return peopleController.create(request, response)
 })
 
-router.get("/peoples/:username", (request, response) => {
+router.get("/peoples", (request, response) => {
   return peopleController.listAll(request, response)
 })
 

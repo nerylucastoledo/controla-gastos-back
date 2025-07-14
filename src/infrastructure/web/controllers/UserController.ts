@@ -19,7 +19,7 @@ export class UserController {
 
   async delete(req: Request, res: Response) {
     try {
-      const dto: DeleteUserInputDTO = Object.assign(new DeleteUserInputDTO(), req.params)
+      const dto: DeleteUserInputDTO = { username: req.user.uid }
       await this.deleteUser.execute(dto);
       res.status(200).send();
     } catch(err) {
@@ -29,7 +29,7 @@ export class UserController {
 
   async update(req: Request, res: Response) {
     try {
-      const dto: UpdateUserInputDTO = Object.assign(new UpdateUserInputDTO(), req.body)
+      const dto: UpdateUserInputDTO = { username: req.user.uid, salary: req.body.salary }
       await this.updateUser.execute(dto);
       res.status(200).json({ message: "Salário atualizado com sucesso." }).send();
     } catch(err) {

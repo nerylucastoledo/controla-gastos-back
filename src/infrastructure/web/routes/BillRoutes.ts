@@ -4,15 +4,15 @@ import { BillController } from '../controllers/BillController';
 const router = Router()
 const billController = BillController.builder()
 
-router.get("/expenses/year/:username/:year", (request, response) => {
+router.get("/expenses/year/:year", (request, response) => {
   return billController.findByusernameAndYear(request, response)
 })
 
-router.get("/expenses/:username/:date", (request, response) => {
+router.get("/expenses/:date", (request, response) => {
   return billController.findDatabyUsernameAndDate(request, response)
 })
 
-router.get("/expenses/:username/:date/:card", (request, response) => {
+router.get("/expenses/:date/:card", (request, response) => {
   return billController.findDataByUsernameDateAndCard(request, response)
 })
 

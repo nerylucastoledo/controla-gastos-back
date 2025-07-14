@@ -2,12 +2,13 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   signOut,
   sendEmailVerification,
   sendPasswordResetEmail,
   Auth,
-  UserCredential
+  UserCredential,
+  signInWithCustomToken,
+  signInWithEmailAndPassword
 } from "firebase/auth";
 import admin, { ServiceAccount } from "firebase-admin";
 
@@ -64,14 +65,18 @@ class FirebaseService {
     });
   }
 
-  public async loginUser(email: string, password: string): Promise<string> {
-    const userCredential: UserCredential = await signInWithEmailAndPassword(this.auth, email, password)
-    .catch(() => {
-      throw new Error("Usuário ou senha incorreto.")
-    });
-    const idToken: string = await userCredential.user.getIdToken();
-    this.setToken(idToken)
-    return idToken;
+  public async loginUser(email: string, password: string, username: string): Promise<string> {
+    const customToken = await admin.auth().createCustomToken(username);
+
+    await signInWithEmailAndPassword(this.auth, email, password)
+      .catch(() => {
+        throw new Error("Usuário ou senha inválidos. Tente novamente");
+      });
+
+    const userCredential: UserCredential = await signInWithCustomToken(this.auth, customToken);
+    
+    this.setToken(userCredential.user.refreshToken);
+    return userCredential.user.getIdToken();
   }
 
   public async logoutUser(): Promise<void> {

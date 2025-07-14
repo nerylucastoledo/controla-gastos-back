@@ -34,7 +34,7 @@ export class AuthLoginUsecase implements Usecase<LoginInputDTO, LoginOutputDTO> 
         throw new Error("Usuário não cadastrado.")
       }
 
-      const idToken = await this.authRepository.login(input.email, input.password);
+      const idToken = await this.authRepository.login(input.email, input.password, existingUser.username);
 
       return {
         message: "Acesso liberado. Redirecionando",

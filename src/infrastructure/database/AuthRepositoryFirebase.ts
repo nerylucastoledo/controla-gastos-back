@@ -15,8 +15,8 @@ export class AuthRepositoryFirebase implements IAuthRepository {
     return { token: token };
   }
 
-  public async login(email: string, password: string): Promise<string> {
-    const idToken = await Firebase.loginUser(email, password);
+  public async login(email: string, password: string, username: string): Promise<string> {
+    const idToken = await Firebase.loginUser(email, password, username);
     return idToken;
   }
 }

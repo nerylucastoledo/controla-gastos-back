@@ -4,11 +4,11 @@ import { UserController } from "../controllers/UserController"
 const router = Router()
 const userController = UserController.builder()
 
-router.put("/users/:username", (request, response) => {
+router.put("/users/", (request, response) => {
   return userController.update(request, response)
 })
 
-router.delete("/users/:username", (request, response) => {
+router.delete("/users", (request, response) => {
   return userController.delete(request, response)
 })
 

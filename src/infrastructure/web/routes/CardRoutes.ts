@@ -8,7 +8,7 @@ router.post("/cards", (request, response) => {
   return cardController.create(request, response)
 })
 
-router.get("/cards/:username", (request, response) => {
+router.get("/cards", (request, response) => {
   return cardController.listAll(request, response)
 })
 

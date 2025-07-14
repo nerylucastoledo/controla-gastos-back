@@ -35,7 +35,7 @@ export class PeopleController {
 
   async listAll(req: Request, res: Response) {
     try {
-      const dto: ListPeopleInputDTO = Object.assign(new ListPeopleInputDTO(), req.params)
+      const dto: ListPeopleInputDTO = { username: req.user.uid }
       const peoples = await this.listPeople.execute(dto);
       res.status(200).json({ data: peoples });
     } catch(err) {

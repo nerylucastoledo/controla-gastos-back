@@ -35,7 +35,7 @@ export class CardController {
 
   async listAll(req: Request, res: Response) {
     try {
-      const dto: ListCardInputDTO = Object.assign(new ListCardInputDTO(), req.params)
+      const dto: ListCardInputDTO = { username: req.user.uid }
       const cards = await this.listCard.execute(dto);
       res.status(200).json({ data: cards });
     } catch(err) {
