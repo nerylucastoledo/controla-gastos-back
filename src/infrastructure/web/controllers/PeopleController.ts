@@ -25,7 +25,10 @@ export class PeopleController {
 
   async create(req: Request, res: Response) {
     try {
-      const dto: CreatePeopleInputDTO = Object.assign(new CreatePeopleInputDTO(), req.body)
+      const body = req.body;
+      body.username = req.user.uid
+
+      const dto: CreatePeopleInputDTO = Object.assign(new CreatePeopleInputDTO(), body)
       await this.createPeople.execute(dto);
       res.status(201).json({ message: "Pessoa criada com sucesso." }).send();
     } catch(err) {

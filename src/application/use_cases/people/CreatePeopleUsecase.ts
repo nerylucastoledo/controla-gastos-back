@@ -21,7 +21,7 @@ export class CreatePeopleUsecase implements Usecase<CreatePeopleInputDTO, void> 
     const peopleAlreadyExists = await this.peopleRepository.findByNameAndUsername(input.name, input.username)
 
     if (peopleAlreadyExists) {
-      throw new Error("Pessoa com esse nome já está cadastrado.")
+      throw new Error("Pessoa com esse nome já existe.")
     }
 
     const people = People.create(input.name, input.username)

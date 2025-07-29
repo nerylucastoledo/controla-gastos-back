@@ -25,7 +25,10 @@ export class CardController {
 
   async create(req: Request, res: Response) {
     try {
-      const dto: CreateCardInputDTO = Object.assign(new CreateCardInputDTO(), req.body)
+      const body = req.body;
+      body.username = req.user.uid
+
+      const dto: CreateCardInputDTO = Object.assign(new CreateCardInputDTO(), body)
       await this.createCard.execute(dto);
       res.status(201).json({ message: "Cartão criado com sucesso." }).send();
     } catch(err) {

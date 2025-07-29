@@ -34,9 +34,13 @@ export class BillController {
 
   async create(req: Request, res: Response) {
     try {
-      const dto: CreateBillInputDTO = Object.assign(new CreateBillInputDTO(), req.body)
+      const body = req.body;
+      body.username = req.user.uid
+
+      const dto: CreateBillInputDTO = Object.assign(new CreateBillInputDTO(), body)
       if (dto.installments > 1) {
         await this.createBillInstallments.execute(dto);
+        
         res.status(201).json({ message: "Gastos criado com sucesso." }).send();
         return;
       }

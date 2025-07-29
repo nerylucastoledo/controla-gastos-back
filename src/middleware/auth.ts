@@ -18,7 +18,6 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
   try {
     const decodedToken = await FirebaseService.getAdminInstance().auth().verifyIdToken(idToken);
-    console.log(decodedToken);
     req.user = decodedToken;
     next();
   } catch (error) {
